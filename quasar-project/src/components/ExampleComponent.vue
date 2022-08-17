@@ -1,64 +1,38 @@
 <template>
-  <div>
-    <p>{{ title }}</p>
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
-    </ul>
-    <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active: {{ active ? 'yes' : 'no' }}</p>
-    <p>Clicks on todos: {{ clickCount }}</p>
+  <div class="card text-center m-3">
+    <h5 class="card-header">{{ available_cocktails }}</h5>
+    <li v-for="cocktail in available_cocktails" :key="cocktail.id">
+  {{ cocktail.name }}
+</li>
+    <q-btn @click="request_cocktails">request cocktail</q-btn>
   </div>
 </template>
 
-<script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  computed,
-  ref,
-  toRef,
-  Ref,
-} from 'vue';
-import { Todo, Meta } from './models';
+<script>
+import axios from 'axios';
 
-function useClickCount() {
-  const clickCount = ref(0);
-  function increment() {
-    clickCount.value += 1
-    return clickCount.value;
+export default {
+  name: 'get-request',
+  data() {
+    return {
+      available_cocktails: null
+    };
+  },
+  mounted() {
+    axios
+      .get('http://127.0.0.1:5055/api/cocktails/available')
+      .then((response) => (this.available_cocktails = response))
+      .catch((error) => console.log(error));
+  },
+  methods: {
+    request_cocktails() {
+      // Simple GET request using fetch
+      console.log('before request');
+      fetch('http://127.0.0.1:5055/api/cocktails')
+        .then((response) => response.json())
+        .then((data) => (this.available_cocktails = data));
+      console.log(`test: ${this.available_cocktails}`);
+    },
   }
-
-  return { clickCount, increment };
-}
-
-function useDisplayTodo(todos: Ref<Todo[]>) {
-  const todoCount = computed(() => todos.value.length);
-  return { todoCount };
-}
-
-export default defineComponent({
-  name: 'ExampleComponent',
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    todos: {
-      type: Array as PropType<Todo[]>,
-      default: () => []
-    },
-    meta: {
-      type: Object as PropType<Meta>,
-      required: true
-    },
-    active: {
-      type: Boolean
-    }
-  },
-  setup (props) {
-    return { ...useClickCount(), ...useDisplayTodo(toRef(props, 'todos')) };
-  },
-});
+};
 </script>
