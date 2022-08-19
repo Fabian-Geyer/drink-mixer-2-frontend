@@ -1,16 +1,28 @@
 <template>
-  <div class="q-pa-md" style="max-width: 350px">
-    <q-list v-for="ingredient in available_ingredients" :key="ingredient.id">
-      <q-item @click="request_ingredients">
-        <q-item-section>
-          <q-item-label>{{ ingredient.name }}</q-item-label>
-          <q-item-label caption lines="2">{{
-            `${ingredient.alcohol_percentage}%`
-          }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <q-btn @click="request_ingredients">request ingredient</q-btn>
+  <div>
+    <div class="q-pa-md">
+      <q-btn round color="secondary" icon="add" />
+    </div>
+    <div class="q-pa-md row items-start q-gutter-md">
+      <q-card
+        v-for="ingredient in available_ingredients"
+        :key="ingredient.id"
+        dark
+        bordered
+        clickable
+        class="my-card bg-primary text-white cursor-pointer q-hoverable"
+      >
+        <span class="q-focus-helper"></span>
+        <q-card-section>
+          <div class="text-h6">{{ ingredient.name }}</div>
+          <div class="text-subtitle2">
+            {{ `Alkohol: ${ingredient.alcohol_percentage}%` }}
+          </div>
+          {{ lorem }}
+        </q-card-section>
+      </q-card>
+      <q-btn @click="request_ingredients">GET request</q-btn>
+    </div>
   </div>
 </template>
 
@@ -25,10 +37,7 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get('http://127.0.0.1:5055/api/ingredients')
-      .then((response) => (this.available_ingredients = response))
-      .catch((error) => console.log(error));
+    this.request_ingredients();
   },
   methods: {
     request_ingredients() {
