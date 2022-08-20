@@ -3,28 +3,29 @@
     <div class="q-pa-md">
       <q-btn round color="secondary" icon="add" />
     </div>
-    <div class="q-pa-md row items-start q-gutter-md">
-      <q-card
-        v-for="ingredient in available_ingredients"
-        :key="ingredient.id"
-        dark
-        bordered
-        clickable
-        class="ingredient-card bg-primary text-white cursor-pointer q-hoverable"
-      >
-        <span class="q-focus-helper"></span>
-        <q-card-section>
-          <div class="text-h6">{{ ingredient.name }}</div>
-          <div class="text-subtitle2">
-            {{ `Alkohol: ${ingredient.alcohol_percentage}%` }}
-          </div>
-        </q-card-section>
-         <q-separator dark />
-        <q-card-actions align="center">
-          <q-btn flat round color="light" icon="edit" />
-          <q-btn flat round color="red" icon="delete" />
-        </q-card-actions>
-      </q-card>
+    <div class="q-pa-md">
+      <q-markup-table class="ingredient-table">
+        <thead>
+          <tr>
+            <th class="text-left">Name der Zutat</th>
+            <th class="text-right">Alkoholgehalt (%)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody
+          v-for="ingredient in available_ingredients"
+          :key="ingredient.id"
+          clickable
+          @click="request_ingredients"
+        >
+          <tr>
+            <td class="text-left">{{ingredient.name}}</td>
+            <td class="text-right">{{ingredient.alcohol_percentage}}</td>
+            <td><q-btn color="secondary" icon="delete" /></td>
+          </tr>
+        </tbody>
+      </q-markup-table>
+
       <q-btn @click="request_ingredients">GET request</q-btn>
     </div>
   </div>
@@ -57,7 +58,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.ingredient-card
+.ingredient-table
   width: 100%
-  max-width: 250px
+  max-width: 2500px
 </style>
