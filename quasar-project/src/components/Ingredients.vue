@@ -10,7 +10,7 @@
         dark
         bordered
         clickable
-        class="my-card bg-primary text-white cursor-pointer q-hoverable"
+        class="ingredient-card bg-primary text-white cursor-pointer q-hoverable"
       >
         <span class="q-focus-helper"></span>
         <q-card-section>
@@ -18,7 +18,6 @@
           <div class="text-subtitle2">
             {{ `Alkohol: ${ingredient.alcohol_percentage}%` }}
           </div>
-          {{ lorem }}
         </q-card-section>
       </q-card>
       <q-btn @click="request_ingredients">GET request</q-btn>
@@ -51,3 +50,9 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.ingredient-card
+  width: 100%
+  max-width: 250px
+</style>
