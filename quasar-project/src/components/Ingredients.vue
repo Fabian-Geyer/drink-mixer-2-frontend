@@ -19,6 +19,11 @@
             {{ `Alkohol: ${ingredient.alcohol_percentage}%` }}
           </div>
         </q-card-section>
+         <q-separator dark />
+        <q-card-actions align="center">
+          <q-btn flat round color="light" icon="edit" />
+          <q-btn flat round color="red" icon="delete" />
+        </q-card-actions>
       </q-card>
       <q-btn @click="request_ingredients">GET request</q-btn>
     </div>
