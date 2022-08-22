@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="q-pa-md">
-      <q-btn round color="secondary" icon="add" />
+      <q-btn round color="accent" icon="add" />
     </div>
     <div class="q-pa-md">
       <q-markup-table class="ingredient-table">
@@ -19,9 +19,15 @@
           @click="request_ingredients"
         >
           <tr>
-            <td class="text-left">{{ingredient.name}}</td>
-            <td class="text-right">{{ingredient.alcohol_percentage}}</td>
-            <td><q-btn color="secondary" icon="delete" /></td>
+            <td class="text-left">{{ ingredient.name }}</td>
+            <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
+            <td>
+              <q-btn
+                @click="delete_ingredient(ingredient.id)"
+                color="secondary"
+                icon="delete"
+              />
+            </td>
           </tr>
         </tbody>
       </q-markup-table>
@@ -41,17 +47,28 @@ export default {
       available_ingredients: null,
     };
   },
-  mounted() {
-    this.request_ingredients();
+  mounted: function () {
+    window.setInterval(() => {
+      this.request_ingredients();
+    }, 500);
   },
   methods: {
     request_ingredients() {
       // Simple GET request using fetch
-      console.log('before request');
       fetch('http://127.0.0.1:5055/api/ingredients')
         .then((response) => response.json())
         .then((data) => (this.available_ingredients = data));
-      console.log(`test: ${this.available_ingredients}`);
+    },
+    delete_ingredient(ingred_id) {
+      const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: ingred_id }),
+      };
+      fetch('http://127.0.0.1:5055/api/ingredients', requestOptions)
+        .then((response) => response.json())
+        .then((data) => (this.delResponse = data));
+      this.request_ingredients();
     },
   },
 };
