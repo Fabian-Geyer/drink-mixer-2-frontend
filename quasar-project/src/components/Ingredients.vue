@@ -3,6 +3,7 @@
     <div class="q-pa-md">
       <q-btn round color="accent" icon="add" />
     </div>
+
     <div class="q-pa-md">
       <q-markup-table class="ingredient-table">
         <thead>
@@ -23,7 +24,10 @@
             <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
             <td>
               <q-btn
-                @click="delete_ingredient(ingredient.id)"
+                @click="
+                  confirm = true;
+                  ingred_to_delete = ingredient.id;
+                "
                 color="secondary"
                 icon="delete"
               />
@@ -34,17 +38,45 @@
 
       <q-btn @click="request_ingredients">GET request</q-btn>
     </div>
+    <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="negative" text-color="white" />
+          <span class="q-ml-sm"
+            >Willst du die Zutat und alle zugehörigen Cocktails löschen?</span
+          >
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn
+            flat
+            label="Löschen"
+            color="negative"
+            v-close-popup
+            @click="delete_ingredient"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { ref } from 'vue';
 
 export default {
   name: 'get-request',
+  setup() {
+    return {
+      confirm: ref(false),
+      ingred_to_delete: ref(null),
+    };
+  },
   data() {
     return {
       available_ingredients: null,
+      delete_id: null,
     };
   },
   mounted: function () {
@@ -59,11 +91,11 @@ export default {
         .then((response) => response.json())
         .then((data) => (this.available_ingredients = data));
     },
-    delete_ingredient(ingred_id) {
+    delete_ingredient() {
       const requestOptions = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: ingred_id }),
+        body: JSON.stringify({ id: this.ingred_to_delete }),
       };
       fetch('http://127.0.0.1:5055/api/ingredients', requestOptions)
         .then((response) => response.json())
