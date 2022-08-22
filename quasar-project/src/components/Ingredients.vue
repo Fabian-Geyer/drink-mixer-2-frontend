@@ -35,8 +35,6 @@
           </tr>
         </tbody>
       </q-markup-table>
-
-      <q-btn @click="request_ingredients">GET request</q-btn>
     </div>
     <q-dialog v-model="confirm" persistent>
       <q-card>

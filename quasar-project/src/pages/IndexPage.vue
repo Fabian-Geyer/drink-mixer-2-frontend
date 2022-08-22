@@ -7,9 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
 import Ingredients from 'components/Ingredients.vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'IndexPage',
