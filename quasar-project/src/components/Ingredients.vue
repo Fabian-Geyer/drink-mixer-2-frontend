@@ -62,6 +62,7 @@
 
 <script>
 import { ref } from 'vue';
+import { Settings } from 'src/config.ts';
 
 export default {
   name: 'get-request',
@@ -80,12 +81,13 @@ export default {
   mounted: function () {
     window.setInterval(() => {
       this.request_ingredients();
-    }, 500);
+    }, Settings.REQUEST_TIMEOUT);
   },
   methods: {
     request_ingredients() {
       // Simple GET request using fetch
-      fetch('http://127.0.0.1:5055/api/ingredients')
+      console.log(Settings.BACKEND_URL);
+      fetch(`${Settings.BACKEND_URL}/api/ingredients`)
         .then((response) => response.json())
         .then((data) => (this.available_ingredients = data));
     },
@@ -95,7 +97,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: this.ingred_to_delete }),
       };
-      fetch('http://127.0.0.1:5055/api/ingredients', requestOptions)
+      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions)
         .then((response) => response.json())
         .then((data) => (this.delResponse = data));
       this.request_ingredients();
