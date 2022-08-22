@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="q-pa-md">
+    <div class="row items-center justify-evenly">
       <q-btn round color="accent" icon="add" />
     </div>
 
@@ -22,7 +22,7 @@
           <tr>
             <td class="text-left">{{ ingredient.name }}</td>
             <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
-            <td>
+            <td class="text-right">
               <q-btn
                 @click="
                   confirm = true;
@@ -109,5 +109,5 @@ export default {
 <style lang="sass" scoped>
 .ingredient-table
   width: 100%
-  max-width: 2500px
+  max-width: 560px
 </style>
