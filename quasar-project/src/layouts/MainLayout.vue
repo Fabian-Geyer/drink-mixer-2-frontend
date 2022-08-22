@@ -8,9 +8,10 @@
       </q-toolbar>
 
       <q-tabs align="justify">
-        <q-route-tab to="/ingredients" label="Zutaten" />
-        <q-route-tab to="/page2" label="Einstellungen" />
-        <q-route-tab to="/page3" label="Bestellen" />
+        <q-route-tab to="/" label="Zutaten" />
+        <q-route-tab to="/" label="Cocktails" />
+        <q-route-tab to="/" label="Einstellungen" />
+        <q-route-tab to="/" label="Bestellen" />
       </q-tabs>
     </q-header>
     <q-page-container>
