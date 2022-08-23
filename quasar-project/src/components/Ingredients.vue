@@ -65,7 +65,7 @@ import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
 
 export default {
-  name: 'get-request',
+  name: 'IngredientComponent',
   setup() {
     return {
       confirm: ref(false),
@@ -79,9 +79,7 @@ export default {
     };
   },
   mounted: function () {
-    window.setInterval(() => {
-      this.request_ingredients();
-    }, Settings.REQUEST_TIMEOUT);
+    this.request_ingredients();
   },
   methods: {
     request_ingredients() {
@@ -91,15 +89,14 @@ export default {
         .then((response) => response.json())
         .then((data) => (this.available_ingredients = data));
     },
-    delete_ingredient() {
+    async delete_ingredient() {
       const requestOptions = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: this.ingred_to_delete }),
       };
-      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions)
-        .then((response) => response.json())
-        .then((data) => (this.delResponse = data));
+      await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
+      this.status = 'Delete successful';
       this.request_ingredients();
     },
   },
