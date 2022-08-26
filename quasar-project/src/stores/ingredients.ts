@@ -4,20 +4,26 @@ import { Settings } from 'src/config';
 export const UseIngredients = defineStore('ingredients', {
   state: () => ({
     ingredients: {},
+    ingredToDelete: null,
   }),
 
-  getters: {
-    //doubleCount (state) {
-    //  return state.counter * 2;
-    //}
-  },
+  getters: {},
 
   actions: {
     update() {
       fetch(`${Settings.BACKEND_URL}/api/ingredients`)
         .then((response) => response.json())
         .then((data) => (this.ingredients = data));
-        console.log(this.ingredients)
+      console.log(this.ingredients);
+    },
+    async delete_ingredient() {
+      const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: this.ingredToDelete }),
+      };
+      await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
+      this.update();
     },
   },
 });

@@ -21,7 +21,7 @@
             <q-btn
               @click="
                 confirm = true;
-                ingred_to_delete = ingredient.id;
+                ingredStore.ingredToDelete = ingredient.id;
               "
               color="secondary"
               icon="delete"
@@ -46,7 +46,7 @@
             label="Löschen"
             color="negative"
             v-close-popup
-            @click="delete_ingredient"
+            @click="ingredStore.delete_ingredient"
           />
         </q-card-actions>
       </q-card>
@@ -57,16 +57,15 @@
 <script>
 import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
-import { UseIngredients } from 'stores/ingredients'
+import { UseIngredients } from 'stores/ingredients';
 
 export default {
   name: 'IngredientTable',
   setup() {
-    const ingredStore = UseIngredients()
+    const ingredStore = UseIngredients();
     return {
       ingredStore,
       confirm: ref(false),
-      ingred_to_delete: ref(null),
     };
   },
   data() {
@@ -77,18 +76,7 @@ export default {
   mounted: function () {
     this.ingredStore.update();
   },
-  methods: {
-    async delete_ingredient() {
-      const requestOptions = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: this.ingred_to_delete }),
-      };
-      await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
-      this.status = 'Delete successful';
-      this.ingredStore.update();
-    },
-  },
+  methods: {},
 };
 </script>
 
