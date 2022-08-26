@@ -65,9 +65,6 @@ export default {
   },
   methods: {
     add_ingredient() {
-      //const element = document.querySelector(
-      //  '#post-request-set-headers .article-id'
-      //);
       const requestOptions = {
         method: 'POST',
         headers: {
