@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody
-        v-for="ingredient in available_ingredients"
+        v-for="ingredient in ingredStore.ingredients"
         :key="ingredient.id"
         clickable
         @click="request_ingredients"
@@ -57,32 +57,27 @@
 <script>
 import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
+import { UseIngredients } from 'stores/ingredients'
 
 export default {
   name: 'IngredientTable',
   setup() {
+    const ingredStore = UseIngredients()
     return {
+      ingredStore,
       confirm: ref(false),
       ingred_to_delete: ref(null),
     };
   },
   data() {
     return {
-      available_ingredients: null,
       delete_id: null,
     };
   },
   mounted: function () {
-    this.request_ingredients();
+    this.ingredStore.update();
   },
   methods: {
-    request_ingredients() {
-      // Simple GET request using fetch
-      console.log(Settings.BACKEND_URL);
-      fetch(`${Settings.BACKEND_URL}/api/ingredients`)
-        .then((response) => response.json())
-        .then((data) => (this.available_ingredients = data));
-    },
     async delete_ingredient() {
       const requestOptions = {
         method: 'DELETE',
@@ -91,7 +86,7 @@ export default {
       };
       await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
       this.status = 'Delete successful';
-      this.request_ingredients();
+      this.ingredStore.update();
     },
   },
 };
