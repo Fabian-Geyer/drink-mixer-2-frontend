@@ -10,7 +10,9 @@
 
         <q-card-section class="q-pt-none">
           <q-input
+            clearable
             dense
+            placeholder="Zutat"
             v-model="ingredient_name"
             autofocus
             @keyup.enter="prompt = false"
@@ -26,14 +28,21 @@
             :max="100"
             :step="1"
             label
+            :label-value="alcohol_percentage + '%'"
             label-always
-            color="light-green"
+            switch-label-side
+            color="primary"
           />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Abbrechen" v-close-popup />
-          <q-btn flat label="Zutat hinzufügen" v-close-popup />
+          <q-btn
+            flat
+            label="Zutat hinzufügen"
+            v-close-popup
+            @click="add_ingredient"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -42,6 +51,7 @@
 
 <script>
 import { ref } from 'vue';
+import { Settings } from 'src/config.ts';
 
 export default {
   name: 'IngredientAdd',
@@ -52,6 +62,25 @@ export default {
 
       ingredient_name: ref(''),
     };
+  },
+  methods: {
+    add_ingredient() {
+      //const element = document.querySelector(
+      //  '#post-request-set-headers .article-id'
+      //);
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: this.ingredient_name,
+          alcohol_percentage: this.alcohol_percentage,
+        }),
+      };
+      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions)
+        .then((response) => response.json())
+    },
   },
 };
 </script>
