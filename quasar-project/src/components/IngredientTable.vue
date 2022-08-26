@@ -30,28 +30,28 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </div>
-  <q-dialog v-model="confirm" persistent>
-    <q-card>
-      <q-card-section class="row items-center">
-        <q-avatar icon="delete" color="negative" text-color="white" />
-        <span class="q-ml-sm"
-          >Willst du die Zutat und alle zugehörigen Cocktails löschen?</span
-        >
-      </q-card-section>
+    <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="negative" text-color="white" />
+          <span class="q-ml-sm"
+            >Willst du die Zutat und alle zugehörigen Cocktails löschen?</span
+          >
+        </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn flat label="Cancel" color="primary" v-close-popup />
-        <q-btn
-          flat
-          label="Löschen"
-          color="negative"
-          v-close-popup
-          @click="delete_ingredient"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn
+            flat
+            label="Löschen"
+            color="negative"
+            v-close-popup
+            @click="delete_ingredient"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
