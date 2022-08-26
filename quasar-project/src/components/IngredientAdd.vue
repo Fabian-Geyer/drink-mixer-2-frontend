@@ -78,9 +78,11 @@ export default {
           alcohol_percentage: this.alcohol_percentage,
         }),
       };
-      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions)
-        .then((response) => response.json())
+      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions).then(
+        (response) => response.json()
+      );
     },
   },
 };
+// TODO: Use state management and state methods for ingredients (https://vuejs.org/guide/scaling-up/state-management.html#simple-state-management-with-reactivity-api)
 </script>
