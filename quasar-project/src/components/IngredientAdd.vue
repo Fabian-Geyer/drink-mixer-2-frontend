@@ -1,6 +1,9 @@
 <template>
   <div>
-    <q-btn round color="accent" icon="add" @click="showDialog = true" />
+    <q-btn color="accent" @click="showDialog = true">
+      <q-icon left size="3em" name="add" />
+      <div>Neue Zutat</div>
+    </q-btn>
 
     <q-dialog v-model="showDialog" persistent>
       <q-card style="min-width: 350px">
@@ -77,10 +80,11 @@ export default {
           alcohol_percentage: this.alcohol_percentage,
         }),
       };
-      await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions).then(
-        (response) => response.json()
-      );
-      this.ingredStore.update()
+      await fetch(
+        `${Settings.BACKEND_URL}/api/ingredients`,
+        requestOptions
+      ).then((response) => response.json());
+      this.ingredStore.update();
     },
   },
 };
