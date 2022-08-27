@@ -52,19 +52,21 @@
 <script>
 import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
+import { UseIngredients } from 'src/stores/ingredients';
 
 export default {
   name: 'IngredientAdd',
   setup() {
+    const ingredStore = UseIngredients();
     return {
       showDialog: ref(false),
       alcohol_percentage: ref(0),
-
       ingredient_name: ref(''),
+      ingredStore,
     };
   },
   methods: {
-    add_ingredient() {
+    async add_ingredient() {
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -75,11 +77,11 @@ export default {
           alcohol_percentage: this.alcohol_percentage,
         }),
       };
-      fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions).then(
+      await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions).then(
         (response) => response.json()
       );
+      this.ingredStore.update()
     },
   },
 };
-// TODO: Use state management and state methods for ingredients (https://vuejs.org/guide/scaling-up/state-management.html#simple-state-management-with-reactivity-api)
 </script>
