@@ -4,18 +4,22 @@
       <ingredient-add></ingredient-add>
       <ingredient-table title="Ingredients"></ingredient-table>
     </div>
+    <div class="items-center column justify-evenly">
+      <cocktail-table></cocktail-table>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
 import IngredientTable from '../components/IngredientTable.vue';
 import IngredientAdd from '../components/IngredientAdd.vue';
+import CocktailTable from '../components/CocktailTable.vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'BarkeeperPage',
-  components: { IngredientTable, IngredientAdd },
+  components: { IngredientTable, IngredientAdd, CocktailTable },
   setup() {
     const router = useRouter();
     return { router };
