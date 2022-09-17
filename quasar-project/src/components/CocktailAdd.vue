@@ -2,49 +2,41 @@
   <div>
     <q-btn color="primary" @click="showDialog = true">
       <q-icon left size="3em" name="add" />
-      <div>Neue Zutat</div>
+      <div>Neuer Cocktail</div>
     </q-btn>
 
     <q-dialog v-model="showDialog" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Name der Zutat:</div>
+          <div class="text-h6">Cocktail hinzufügen:</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <q-input
             clearable
             dense
-            placeholder="Zutat"
-            v-model="ingredient_name"
+            placeholder="Name"
+            v-model="cocktailName"
             autofocus
             @keyup.enter="prompt = false"
           />
         </q-card-section>
         <q-card-section>
-          <div class="text-h6">Alkoholgehalt:</div>
+          <div class="text-h6">Zutaten:</div>
         </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-slider
-            v-model="alcohol_percentage"
-            :min="0"
-            :max="100"
-            :step="1"
-            label
-            :label-value="alcohol_percentage + '%'"
-            label-always
-            switch-label-side
-            color="primary"
-          />
+        <q-card-section class="q-pt-none"> 
+
+
+            
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Abbrechen" v-close-popup />
           <q-btn
             flat
-            label="Zutat hinzufügen"
+            label="Cocktail hinzufügen"
             v-close-popup
-            @click="add_ingredient"
+            @click="add_cocktail"
           />
         </q-card-actions>
       </q-card>
@@ -56,28 +48,30 @@
 import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
 import { UseIngredients } from 'src/stores/ingredients';
+import { UseCocktails } from 'src/stores/cocktails';
 
 export default {
-  name: 'IngredientAdd',
+  name: 'CocktailAdd',
   setup() {
     const ingredStore = UseIngredients();
+    const cocktailStore = UseCocktails();
     return {
       showDialog: ref(false),
-      alcohol_percentage: ref(0),
-      ingredient_name: ref(''),
       ingredStore,
+      ingredients: ref({}),
+      cocktailStore,
     };
   },
   methods: {
-    async add_ingredient() {
+    async add_cocktail() {
       const requestOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: this.ingredient_name,
-          alcohol_percentage: this.alcohol_percentage,
+          name: this.cocktail_name,
+          // ingredients here,
         }),
       };
       await fetch(
