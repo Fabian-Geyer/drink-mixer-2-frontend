@@ -1,4 +1,4 @@
-# coma2-frontend (coma2-frontend)
+# drink-mixer-2-frontend
 
 Frontend for CocktailMachineV2
 
