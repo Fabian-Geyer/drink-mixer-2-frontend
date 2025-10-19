@@ -22,7 +22,13 @@ import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'BarkeeperPage',
-  components: { IngredientTable, IngredientAdd, CocktailTable, CocktailAdd, CocktailAdd },
+  components: {
+    IngredientTable,
+    IngredientAdd,
+    CocktailTable,
+    CocktailAdd,
+    CocktailAdd,
+  },
   setup() {
     const router = useRouter();
     return { router };

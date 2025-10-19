@@ -24,10 +24,20 @@
         <q-card-section>
           <div class="text-h6">Zutaten:</div>
         </q-card-section>
-        <q-card-section class="q-pt-none"> 
 
-
-            
+        <q-card-section class="q-pt-none">
+          <q-card v-for="ingredient in newIngredients" :key="ingredient.id">
+            <q-card-section class="q-pt-none">
+              <q-input
+                clearable
+                dense
+                placeholder="Name"
+                v-model="ingredient.name"
+                autofocus
+                @keyup.enter="prompt = false"
+              />
+            </q-card-section>
+          </q-card>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -53,6 +63,12 @@ import { UseCocktails } from 'src/stores/cocktails';
 export default {
   name: 'CocktailAdd',
   setup() {
+    let newIngredients = [
+      {
+        name: 'Name',
+        id: null,
+      },
+    ];
     const ingredStore = UseIngredients();
     const cocktailStore = UseCocktails();
     return {
@@ -60,6 +76,7 @@ export default {
       ingredStore,
       ingredients: ref({}),
       cocktailStore,
+      newIngredients,
     };
   },
   methods: {
@@ -76,7 +93,7 @@ export default {
       };
       await fetch(
         `${Settings.BACKEND_URL}/api/ingredients`,
-        requestOptions
+        requestOptions,
       ).then((response) => response.json());
       this.ingredStore.update();
     },

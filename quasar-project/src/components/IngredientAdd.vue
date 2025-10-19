@@ -82,7 +82,7 @@ export default {
       };
       await fetch(
         `${Settings.BACKEND_URL}/api/ingredients`,
-        requestOptions
+        requestOptions,
       ).then((response) => response.json());
       this.ingredStore.update();
     },

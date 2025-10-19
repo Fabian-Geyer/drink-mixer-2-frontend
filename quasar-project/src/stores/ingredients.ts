@@ -18,7 +18,7 @@ export const UseIngredients = defineStore('ingredients', {
       console.log(this.ingredients);
     },
     async delete_ingredient() {
-      const cocktailStore = UseCocktails()
+      const cocktailStore = UseCocktails();
       const requestOptions = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,7 @@ export const UseIngredients = defineStore('ingredients', {
       };
       await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
       this.update();
-      cocktailStore.update(); 
+      cocktailStore.update();
     },
   },
 });

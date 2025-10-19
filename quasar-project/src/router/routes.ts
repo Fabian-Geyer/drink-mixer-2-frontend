@@ -7,8 +7,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '/barkeeper', component: () => import('pages/barkeeper.vue') },
       { path: '/settings', component: () => import('pages/settings.vue') },
-      { path: '/order', component: () => import('pages/order.vue') }
-  ],
+      { path: '/order', component: () => import('pages/order.vue') },
+    ],
   },
 
   // Always leave this as last one,

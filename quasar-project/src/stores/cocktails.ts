@@ -13,7 +13,7 @@ export const UseCocktails = defineStore('cocktails', {
       fetch(`${Settings.BACKEND_URL}/api/cocktails`)
         .then((response) => response.json())
         .then((data) => (this.cocktails = data));
-        console.log(this.cocktails)
+      console.log(this.cocktails);
     },
   },
 });

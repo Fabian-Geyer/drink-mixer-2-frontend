@@ -16,7 +16,7 @@
             :key="ingredient.id"
             caption
           >
-          {{ingredient.name + ": " + ingredient.amount_percentage + "%"}}
+            {{ ingredient.name + ': ' + ingredient.amount_percentage + '%' }}
           </q-item-label>
         </q-item-section>
       </q-item>
