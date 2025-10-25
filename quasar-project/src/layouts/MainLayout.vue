@@ -44,7 +44,7 @@ export default defineComponent({
   text-shadow: 0 0 20px rgba(30, 144, 255, 0.3)
 
 .modern-tabs
-  background: rgba(30, 144, 255, 0.05)
+  background: var(--modern-darker)
   backdrop-filter: blur(20px)
   border-top: 1px solid var(--modern-border)
 
