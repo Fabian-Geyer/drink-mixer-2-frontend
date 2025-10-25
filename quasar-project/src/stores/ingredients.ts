@@ -118,5 +118,45 @@ export const useIngredientStore = defineStore('ingredients', {
         throw error;
       }
     },
+
+    async edit_ingredient(id: number, name: string, alcohol_percentage: number) {
+      try {
+        // Prepare the PUT request
+        const requestOptions = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            id: id,
+            name: name, 
+            alcohol_percentage: alcohol_percentage 
+          }),
+        };
+        
+        // Make the PUT request
+        const response = await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
+        
+        // Check if the edit was successful
+        if (!response.ok) {
+          throw new Error(`Failed to edit ingredient! status: ${response.status}`);
+        }
+        
+        // Update store after successful edit
+        await this.update();
+        
+        console.log('Ingredient edited successfully');
+      } catch (error) {
+        console.error('Failed to edit ingredient:', error);
+        
+        // Handle specific error types
+        if (error instanceof TypeError) {
+          console.error('Network error - could not connect to backend');
+        } else {
+          console.error('Server error during edit');
+        }
+        
+        // Re-throw the error so the UI can handle it if needed
+        throw error;
+      }
+    },
   },
 });

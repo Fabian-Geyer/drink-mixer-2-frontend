@@ -19,15 +19,13 @@
           <tbody
             v-for="ingredient in ingredientStore.ingredients"
             :key="ingredient.id"
-            clickable
-            @click="request_ingredients"
           >
-            <tr>
+            <tr class="clickable-row" @click="openEditDialog(ingredient)">
               <td class="text-left">{{ ingredient.name }}</td>
               <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
               <td class="text-right">
                 <q-btn
-                  @click="
+                  @click.stop="
                     confirm = true;
                     ingredientStore.ingredToDelete = ingredient.id;
                   "
@@ -101,6 +99,52 @@
       </q-card>
     </q-dialog>
 
+    <!-- Edit Ingredient Dialog -->
+    <q-dialog v-model="showEditDialog" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Zutat bearbeiten:</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input
+            clearable
+            dense
+            placeholder="Zutat"
+            v-model="editIngredientName"
+            autofocus
+            @keyup.enter="edit_ingredient"
+          />
+        </q-card-section>
+        <q-card-section>
+          <div class="text-h6">Alkoholgehalt:</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-slider
+            v-model="editAlcoholPercentage"
+            :min="0"
+            :max="100"
+            :step="1"
+            label
+            :label-value="editAlcoholPercentage + '%'"
+            label-always
+            switch-label-side
+            color="primary"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Abbrechen" v-close-popup @click="resetEditForm" />
+          <q-btn
+            flat
+            label="Zutat speichern"
+            v-close-popup
+            @click="edit_ingredient"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <!-- Delete Confirmation Dialog -->
     <q-dialog v-model="confirm" persistent>
       <q-card>
@@ -138,8 +182,12 @@ export default {
       ingredientStore,
       confirm: ref(false),
       showAddDialog: ref(false),
+      showEditDialog: ref(false),
       alcohol_percentage: ref(0),
       ingredient_name: ref(''),
+      editingIngredient: ref(null),
+      editAlcoholPercentage: ref(0),
+      editIngredientName: ref(''),
     };
   },
   data() {
@@ -166,6 +214,33 @@ export default {
       this.ingredient_name = '';
       this.alcohol_percentage = 0;
       this.showAddDialog = false;
+    },
+    openEditDialog(ingredient) {
+      this.editingIngredient = ingredient;
+      this.editIngredientName = ingredient.name;
+      this.editAlcoholPercentage = ingredient.alcohol_percentage;
+      this.showEditDialog = true;
+    },
+    async edit_ingredient() {
+      try {
+        // Call store action to edit ingredient
+        await this.ingredientStore.edit_ingredient(
+          this.editingIngredient.id, 
+          this.editIngredientName, 
+          this.editAlcoholPercentage
+        );
+        this.resetEditForm();
+      } catch (error) {
+        // Handle UI feedback for errors (could show toast/notification)
+        console.error('Failed to edit ingredient in UI:', error);
+        // TODO: Add user-friendly error message here
+      }
+    },
+    resetEditForm() {
+      this.editingIngredient = null;
+      this.editIngredientName = '';
+      this.editAlcoholPercentage = 0;
+      this.showEditDialog = false;
     },
   },
 };
@@ -209,4 +284,11 @@ export default {
     color: var(--modern-text-primary)
     border-bottom: 1px solid var(--modern-border)
     font-weight: 500
+
+.clickable-row
+  cursor: pointer
+  transition: background-color 0.2s ease
+  
+  &:hover
+    background: rgba(30, 144, 255, 0.1) !important
 </style>
