@@ -55,12 +55,12 @@
 <script>
 import { ref } from 'vue';
 import { Settings } from 'src/config.ts';
-import { UseIngredients } from 'src/stores/ingredients';
+import { useIngredientStore } from 'src/stores/ingredients';
 
 export default {
   name: 'IngredientAdd',
   setup() {
-    const ingredStore = UseIngredients();
+    const ingredStore = useIngredientStore();
     return {
       showDialog: ref(false),
       alcohol_percentage: ref(0),
@@ -70,21 +70,7 @@ export default {
   },
   methods: {
     async add_ingredient() {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: this.ingredient_name,
-          alcohol_percentage: this.alcohol_percentage,
-        }),
-      };
-      await fetch(
-        `${Settings.BACKEND_URL}/api/ingredients`,
-        requestOptions,
-      ).then((response) => response.json());
-      this.ingredStore.update();
+      await this.ingredStore.add_ingredient(this.ingredient_name, this.alcohol_percentage);
     },
   },
 };
