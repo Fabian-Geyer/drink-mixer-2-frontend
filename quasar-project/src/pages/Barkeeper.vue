@@ -1,7 +1,6 @@
 <template>
   <q-page class="row items-center justify-evenly">
     <div class="items-center column justify-evenly">
-      <ingredient-add></ingredient-add>
       <ingredient-table title="Ingredients"></ingredient-table>
     </div>
     <div class="items-center column justify-evenly">
@@ -13,7 +12,6 @@
 
 <script lang="ts">
 import IngredientTable from '../components/IngredientTable.vue';
-import IngredientAdd from '../components/IngredientAdd.vue';
 import CocktailTable from '../components/CocktailTable.vue';
 import CocktailAdd from '../components/CocktailAdd.vue';
 
@@ -24,7 +22,6 @@ export default defineComponent({
   name: 'BarkeeperPage',
   components: {
     IngredientTable,
-    IngredientAdd,
     CocktailTable,
     CocktailAdd,
   },
