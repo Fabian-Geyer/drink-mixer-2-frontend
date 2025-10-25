@@ -1,1 +1,97 @@
 // app global css in SCSS form
+
+// Modern Dark Mode Color System
+:root {
+  // Modern signature colors
+  --modern-primary: #1e90ff;           // Electric blue
+  --modern-primary-dark: #0066cc;      // Darker blue
+  --modern-secondary: #4a90e2;         // Light blue
+  --modern-accent: #00d4ff;            // Bright cyan
+
+  // Dark mode foundation
+  --modern-black: #0a0a0a;             // Pure black
+  --modern-dark: #121212;              // Dark background
+  --modern-darker: #1a1a1a;            // Darker elements
+  --modern-surface: #1e1e1e;           // Card surfaces
+  --modern-border: #333333;            // Subtle borders
+  
+  // Text colors
+  --modern-text-primary: #ffffff;      // Primary text
+  --modern-text-secondary: #b0b0b0;    // Secondary text
+  --modern-text-muted: #888888;        // Muted text
+  
+  // Component gradients
+  --ingredient-gradient-start: #1a1a1a;
+  --ingredient-gradient-end: #2d2d2d;
+  
+  --cocktail-gradient-start: #0066cc;
+  --cocktail-gradient-end: #1e90ff;
+  
+  --header-gradient-start: #0a0a0a;
+  --header-gradient-end: #1a1a1a;
+  
+  // Background gradients
+  --bg-gradient-start: #0f0f0f;
+  --bg-gradient-end: #1a1a1a;
+  
+  // Status colors (Modern style)
+  --modern-success: #00ff88;           // Electric green
+  --modern-warning: #ffa502;           // Amber
+  --modern-danger: #ff4757;            // Modern red
+  --modern-info: #1e90ff;              // Modern blue
+}
+
+// Global modern dark theme
+.modern-theme {
+  background: var(--modern-dark);
+  color: var(--modern-text-primary);
+  
+  .q-card {
+    background: var(--modern-surface);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    border: 1px solid var(--modern-border);
+  }
+  
+  .q-btn {
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.5px;
+  }
+  
+  .q-dialog .q-card {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    background: var(--modern-surface);
+    border: 1px solid var(--modern-border);
+  }
+  
+  .q-table {
+    background: transparent;
+    
+    thead th {
+      background: var(--modern-darker);
+      color: var(--modern-text-primary);
+      border-bottom: 2px solid var(--modern-border);
+    }
+    
+    tbody td {
+      color: var(--modern-text-primary);
+      border-bottom: 1px solid var(--modern-border);
+    }
+    
+    tbody tr:hover {
+      background: rgba(30, 144, 255, 0.05);
+    }
+  }
+  
+  .q-input, .q-slider {
+    color: var(--modern-text-primary);
+    
+    .q-field__control {
+      background: var(--modern-darker);
+      border: 1px solid var(--modern-border);
+      border-radius: 8px;
+    }
+  }
+}

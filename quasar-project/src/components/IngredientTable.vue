@@ -183,20 +183,38 @@ export default {
 .ingredient-card
   width: 100%
   max-width: 600px
-  border-radius: 12px
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1)
+  border-radius: 16px
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4)
+  background: var(--modern-surface)
+  border: 1px solid var(--modern-border)
 
 .card-header
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
-  border-radius: 12px 12px 0 0
+  background: linear-gradient(135deg, var(--ingredient-gradient-start) 0%, var(--ingredient-gradient-end) 100%)
+  border-radius: 16px 16px 0 0
+  border-bottom: 1px solid var(--modern-border)
+  
+  .text-h6
+    font-weight: 700
+    letter-spacing: 1px
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1)
 
 .ingredient-table
   width: 100%
+  background: transparent
   
   thead th
-    background-color: #f5f5f5
-    font-weight: 600
+    background: var(--modern-darker)
+    color: var(--modern-text-primary)
+    font-weight: 700
+    border-bottom: 2px solid var(--modern-border)
+    letter-spacing: 0.5px
     
-  tbody tr:hover
-    background-color: #f9f9f9
+  tbody tr
+    &:hover
+      background: rgba(30, 144, 255, 0.05)
+      
+  tbody td
+    color: var(--modern-text-primary)
+    border-bottom: 1px solid var(--modern-border)
+    font-weight: 500
 </style>

@@ -1,11 +1,14 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <div class="items-center column justify-evenly">
-      <ingredient-table title="Ingredients"></ingredient-table>
-    </div>
-    <div class="items-center column justify-evenly">
-      <cocktail-add></cocktail-add>
-      <cocktail-table></cocktail-table>
+  <q-page class="barkeeper-page">
+    <div class="page-container">
+      <div class="cards-grid">
+        <div class="card-column">
+          <ingredient-table></ingredient-table>
+        </div>
+        <div class="card-column">
+          <cocktail-table></cocktail-table>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -13,21 +16,47 @@
 <script lang="ts">
 import IngredientTable from '../components/IngredientTable.vue';
 import CocktailTable from '../components/CocktailTable.vue';
-import CocktailAdd from '../components/CocktailAdd.vue';
 
 import { defineComponent } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'BarkeeperPage',
   components: {
     IngredientTable,
     CocktailTable,
-    CocktailAdd,
-  },
-  setup() {
-    const router = useRouter();
-    return { router };
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.barkeeper-page
+  padding: 0
+  background: transparent
+  min-height: 100vh
+
+.page-container
+  padding: 32px
+  max-width: 1400px
+  margin: 0 auto
+
+.cards-grid
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 40px
+  align-items: start
+  
+  @media (max-width: 1024px)
+    grid-template-columns: 1fr
+    gap: 32px
+    
+  @media (max-width: 768px)
+    gap: 24px
+
+.card-column
+  display: flex
+  flex-direction: column
+  gap: 32px
+  
+  @media (max-width: 768px)
+    gap: 24px
+</style>

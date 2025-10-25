@@ -10,16 +10,19 @@
 
 // It's highly recommended to change the default colors
 // to match your app's branding.
-// Tip: Use the "Theme Builder" on Quasar's documentation website.
+// Modern Dark Mode Theme - Sleek & Modern
 
-$primary: #4abdac;
-$secondary: #fc4a1a;
-$accent: #f7b733;
+// Main modern colors
+$primary: #1e90ff;     // Electric blue - modern signature color
+$secondary: #4a90e2;   // Lighter blue - complementary
+$accent: #00d4ff;      // Bright cyan - high-tech accent
 
-$dark: #1d1d1d;
-$dark-page: #121212;
+// Dark mode foundation
+$dark: #0a0a0a;        // Pure black - modern interior
+$dark-page: #121212;   // Dark gray - modern UI background
 
-$positive: #21ba45;
-$negative: #c10015;
-$info: #31ccec;
-$warning: #f2c037;
+// Status colors - modern tech style
+$positive: #00ff88;    // Electric green - modern success
+$negative: #ff4757;    // Modern red - alerts
+$info: #1e90ff;        // Modern blue - information
+$warning: #ffa502;     // Amber warning - tech style
