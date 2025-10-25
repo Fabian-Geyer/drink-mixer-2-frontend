@@ -56,9 +56,8 @@
 
 <script>
 import { ref } from 'vue';
-import { Settings } from 'src/config.ts';
-import { UseIngredients } from 'src/stores/ingredients';
-import { UseCocktails } from 'src/stores/cocktails';
+import { useIngredientStore } from 'src/stores/ingredients';
+import { useCocktailStore } from 'src/stores/cocktails';
 
 export default {
   name: 'CocktailAdd',
@@ -69,11 +68,11 @@ export default {
         id: null,
       },
     ];
-    const ingredStore = UseIngredients();
-    const cocktailStore = UseCocktails();
+    const ingredientStore = useIngredientStore();
+    const cocktailStore = useCocktailStore();
     return {
       showDialog: ref(false),
-      ingredStore,
+      ingredientStore,
       ingredients: ref({}),
       cocktailStore,
       newIngredients,
@@ -81,21 +80,19 @@ export default {
   },
   methods: {
     async add_cocktail() {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: this.cocktail_name,
-          // ingredients here,
-        }),
-      };
-      await fetch(
-        `${Settings.BACKEND_URL}/api/ingredients`,
-        requestOptions,
-      ).then((response) => response.json());
-      this.ingredStore.update();
+      try {
+        // Call store action instead of direct API call
+        await this.cocktailStore.add_cocktail(this.cocktailName, this.newIngredients);
+        
+        // Reset form after successful addition
+        this.cocktailName = '';
+        this.newIngredients = [{ name: 'Name', id: null }];
+        
+      } catch (error) {
+        // Handle UI feedback for errors
+        console.error('Failed to add cocktail in UI:', error);
+        // TODO: Add user-friendly error message here
+      }
     },
   },
 };

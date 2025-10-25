@@ -17,7 +17,7 @@
             </tr>
           </thead>
           <tbody
-            v-for="ingredient in ingredStore.ingredients"
+            v-for="ingredient in ingredientStore.ingredients"
             :key="ingredient.id"
             clickable
             @click="request_ingredients"
@@ -29,7 +29,7 @@
                 <q-btn
                   @click="
                     confirm = true;
-                    ingredStore.ingredToDelete = ingredient.id;
+                    ingredientStore.ingredToDelete = ingredient.id;
                   "
                   color="secondary"
                   icon="delete"
@@ -118,7 +118,7 @@
             label="Löschen"
             color="negative"
             v-close-popup
-            @click="ingredStore.delete_ingredient"
+            @click="ingredientStore.delete_ingredient"
           />
         </q-card-actions>
       </q-card>
@@ -128,15 +128,14 @@
 
 <script>
 import { ref } from 'vue';
-import { Settings } from 'src/config.ts';
-import { UseIngredients } from 'stores/ingredients';
+import { useIngredientStore } from 'stores/ingredients';
 
 export default {
   name: 'IngredientTable',
   setup() {
-    const ingredStore = UseIngredients();
+    const ingredientStore = useIngredientStore();
     return {
-      ingredStore,
+      ingredientStore,
       confirm: ref(false),
       showAddDialog: ref(false),
       alcohol_percentage: ref(0),
@@ -149,26 +148,19 @@ export default {
     };
   },
   mounted: function () {
-    this.ingredStore.update();
+    this.ingredientStore.update();
   },
   methods: {
     async add_ingredient() {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: this.ingredient_name,
-          alcohol_percentage: this.alcohol_percentage,
-        }),
-      };
-      await fetch(
-        `${Settings.BACKEND_URL}/api/ingredients`,
-        requestOptions,
-      ).then((response) => response.json());
-      this.ingredStore.update();
-      this.resetAddForm();
+      try {
+        // Call store action instead of direct API call
+        await this.ingredientStore.add_ingredient(this.ingredient_name, this.alcohol_percentage);
+        this.resetAddForm();
+      } catch (error) {
+        // Handle UI feedback for errors (could show toast/notification)
+        console.error('Failed to add ingredient in UI:', error);
+        // TODO: Add user-friendly error message here
+      }
     },
     resetAddForm() {
       this.ingredient_name = '';

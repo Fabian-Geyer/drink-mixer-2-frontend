@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { Settings } from 'src/config';
-import { UseCocktails } from './cocktails';
+import { useCocktailStore } from './cocktails';
 
-export const UseIngredients = defineStore('ingredients', {
+export const useIngredientStore = defineStore('ingredients', {
   state: () => ({
     ingredients: {},
     ingredToDelete: null,
@@ -43,7 +43,7 @@ export const UseIngredients = defineStore('ingredients', {
     },
     async delete_ingredient() {
       try {
-        const cocktailStore = UseCocktails();
+        const cocktailStore = useCocktailStore();
         
         // Prepare the DELETE request
         const requestOptions = {
@@ -73,6 +73,45 @@ export const UseIngredients = defineStore('ingredients', {
           console.error('Network error - could not connect to backend');
         } else {
           console.error('Server error during deletion');
+        }
+        
+        // Re-throw the error so the UI can handle it if needed
+        throw error;
+      }
+    },
+
+    async add_ingredient(name: string, alcohol_percentage: number) {
+      try {
+        // Prepare the POST request
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            name: name, 
+            alcohol_percentage: alcohol_percentage 
+          }),
+        };
+        
+        // Make the POST request
+        const response = await fetch(`${Settings.BACKEND_URL}/api/ingredients`, requestOptions);
+        
+        // Check if the addition was successful
+        if (!response.ok) {
+          throw new Error(`Failed to add ingredient! status: ${response.status}`);
+        }
+        
+        // Update store after successful addition
+        await this.update();
+        
+        console.log('Ingredient added successfully');
+      } catch (error) {
+        console.error('Failed to add ingredient:', error);
+        
+        // Handle specific error types
+        if (error instanceof TypeError) {
+          console.error('Network error - could not connect to backend');
+        } else {
+          console.error('Server error during addition');
         }
         
         // Re-throw the error so the UI can handle it if needed

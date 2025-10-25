@@ -49,11 +49,11 @@
 
 <script>
 import { ref } from 'vue';
-import { UseCocktails } from 'stores/cocktails';
+import { useCocktailStore } from 'stores/cocktails';
 export default {
   name: 'CocktailTable',
   setup() {
-    const cocktailStore = UseCocktails();
+    const cocktailStore = useCocktailStore();
     return {
       cocktailStore,
       showAddDialog: ref(false),
