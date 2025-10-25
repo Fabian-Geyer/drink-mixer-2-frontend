@@ -27,7 +27,6 @@ export default defineComponent({
     IngredientAdd,
     CocktailTable,
     CocktailAdd,
-    CocktailAdd,
   },
   setup() {
     const router = useRouter();
