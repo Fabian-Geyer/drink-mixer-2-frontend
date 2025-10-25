@@ -32,9 +32,9 @@ export default defineComponent({
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x1e1e1e);
 
-      // Camera setup
+      // Camera setup with more parallel FOV
       camera = new THREE.PerspectiveCamera(
-        75,
+        25, // Much smaller FOV for more parallel/orthographic-like view
         container.value.clientWidth / container.value.clientHeight,
         0.1,
         1000
@@ -254,12 +254,12 @@ export default defineComponent({
     // Zoom with mouse wheel
     const onWheel = (event: WheelEvent) => {
       event.preventDefault();
-      const zoomSpeed = 1;
+      const zoomSpeed = .4;
       
-      if (event.deltaY > 0 && cameraRadius < 25) {
+      if (event.deltaY > 0 && cameraRadius < 15) {
         // Zoom out
         cameraRadius += zoomSpeed;
-      } else if (event.deltaY < 0 && cameraRadius > 5) {
+      } else if (event.deltaY < 0 && cameraRadius > 10) {
         // Zoom in
         cameraRadius -= zoomSpeed;
       }
