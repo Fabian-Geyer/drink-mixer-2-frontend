@@ -1,40 +1,60 @@
 <template>
   <div class="q-pa-md">
-    <div class="row justify-between items-center q-mb-md">
-      <div class="text-h6">Zutaten</div>
-      <q-btn color="primary" @click="showAddDialog = true" icon="add" label="Neue Zutat" />
-    </div>
-    
-    <q-markup-table class="ingredient-table">
-      <thead>
-        <tr>
-          <th class="text-left">Name der Zutat</th>
-          <th class="text-right">Alkoholgehalt (%)</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody
-        v-for="ingredient in ingredStore.ingredients"
-        :key="ingredient.id"
-        clickable
-        @click="request_ingredients"
-      >
-        <tr>
-          <td class="text-left">{{ ingredient.name }}</td>
-          <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
-          <td class="text-right">
-            <q-btn
-              @click="
-                confirm = true;
-                ingredStore.ingredToDelete = ingredient.id;
-              "
-              color="secondary"
-              icon="delete"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </q-markup-table>
+    <q-card class="ingredient-card">
+      <!-- Card Header -->
+      <q-card-section class="card-header">
+        <div class="text-h6 text-white">Zutaten</div>
+      </q-card-section>
+      
+      <!-- Table Content -->
+      <q-card-section class="q-pa-none">
+        <q-markup-table class="ingredient-table" flat>
+          <thead>
+            <tr>
+              <th class="text-left">Name</th>
+              <th class="text-right">Alkoholgehalt (%)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody
+            v-for="ingredient in ingredStore.ingredients"
+            :key="ingredient.id"
+            clickable
+            @click="request_ingredients"
+          >
+            <tr>
+              <td class="text-left">{{ ingredient.name }}</td>
+              <td class="text-right">{{ ingredient.alcohol_percentage }}</td>
+              <td class="text-right">
+                <q-btn
+                  @click="
+                    confirm = true;
+                    ingredStore.ingredToDelete = ingredient.id;
+                  "
+                  color="secondary"
+                  icon="delete"
+                  size="sm"
+                  round
+                />
+              </td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card-section>
+      
+      <!-- Add Button Section -->
+      <q-card-section class="q-pt-md">
+        <div class="row justify-end">
+          <q-btn 
+            color="primary" 
+            @click="showAddDialog = true" 
+            icon="add" 
+            label=""
+            unelevated
+          />
+        </div>
+      </q-card-section>
+    </q-card>
     <!-- Add Ingredient Dialog -->
     <q-dialog v-model="showAddDialog" persistent>
       <q-card style="min-width: 350px">
@@ -160,7 +180,23 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.ingredient-card
+  width: 100%
+  max-width: 600px
+  border-radius: 12px
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1)
+
+.card-header
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+  border-radius: 12px 12px 0 0
+
 .ingredient-table
   width: 100%
-  max-width: 560px
+  
+  thead th
+    background-color: #f5f5f5
+    font-weight: 600
+    
+  tbody tr:hover
+    background-color: #f9f9f9
 </style>
