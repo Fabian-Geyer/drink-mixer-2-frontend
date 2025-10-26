@@ -16,6 +16,9 @@ export default defineComponent({
     let renderer: THREE.WebGLRenderer;
     let machineGroup: THREE.Group;
     let animationId: number;
+    let raycaster: THREE.Raycaster;
+    let mouse: THREE.Vector2;
+    let interactiveButtons: THREE.Mesh[] = [];
 
     // Camera orbital controls variables
     let isMouseDown = false;
@@ -24,7 +27,7 @@ export default defineComponent({
     let cameraRadius = 20;
     let cameraTheta = Math.PI / 4; // Horizontal angle
     const cameraPhi = Math.PI / 3; // Fixed vertical angle - no longer variable
-    const cameraTarget = new THREE.Vector3(0, 0, 0);
+    const cameraTarget = new THREE.Vector3(0, 0, 0.2);
 
     const init = () => {
       if (!container.value) return;
@@ -41,6 +44,10 @@ export default defineComponent({
         1000
       );
       updateCameraPosition();
+
+      // Initialize raycaster for mouse interaction
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
 
       // Renderer setup
       renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -79,6 +86,7 @@ export default defineComponent({
       renderer.domElement.addEventListener('mousemove', onMouseMove);
       renderer.domElement.addEventListener('mouseup', onMouseUp);
       renderer.domElement.addEventListener('mouseleave', onMouseUp);
+      renderer.domElement.addEventListener('click', onMouseClick);
 
       // Event listeners for touch interaction
       renderer.domElement.addEventListener('touchstart', onTouchStart);
@@ -181,6 +189,50 @@ export default defineComponent({
           pointLight.position.set(moduleX, 1.25, 0);
           moduleGroup.add(pointLight);
           
+          // Create interactive buttons for bottle positions
+          const buttonMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x4CAF50, // Bright green to indicate it's interactive
+            emissive: 0x0a1f0a, // Slight green glow
+            transparent: true,
+            opacity: 0.9
+          });
+          const buttonHoverMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x66BB6A, // Lighter green for hover
+            emissive: 0x0f2f0f,
+            transparent: true,
+            opacity: 1.0
+          });
+          
+          // Front button (positive Z) - laid flat on ground
+          const frontButtonGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.05, 12);
+          const frontButton = new THREE.Mesh(frontButtonGeometry, buttonMaterial.clone());
+          frontButton.position.set(moduleX, 0.025, 0.8); // Further away from machine
+          // No rotation needed - cylinder is already vertical by default
+          frontButton.userData = {
+            type: 'bottle-button',
+            moduleIndex: i,
+            side: side,
+            position: 'front',
+            drink: null // Will store selected drink
+          };
+          moduleGroup.add(frontButton);
+          interactiveButtons.push(frontButton);
+          
+          // Back button (negative Z) - laid flat on ground
+          const backButtonGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.05, 12);
+          const backButton = new THREE.Mesh(backButtonGeometry, buttonMaterial.clone());
+          backButton.position.set(moduleX, 0.025, -0.8); // Further away from machine
+          // No rotation needed - cylinder is already vertical by default
+          backButton.userData = {
+            type: 'bottle-button',
+            moduleIndex: i,
+            side: side,
+            position: 'back',
+            drink: null // Will store selected drink
+          };
+          moduleGroup.add(backButton);
+          interactiveButtons.push(backButton);
+          
           // Add a small base platform for each module
           const baseGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.8);
           const baseMesh = new THREE.Mesh(baseGeometry, moduleMaterial);
@@ -223,21 +275,141 @@ export default defineComponent({
     };
 
     const onMouseMove = (event: MouseEvent) => {
-      if (!isMouseDown) return;
+      // Handle camera rotation
+      if (isMouseDown) {
+        const deltaX = event.clientX - mouseX;
 
-      const deltaX = event.clientX - mouseX;
+        // Update camera orbital angle (only horizontal rotation)
+        cameraTheta += deltaX * 0.01;
+        
+        updateCameraPosition();
 
-      // Update camera orbital angle (only horizontal rotation)
-      cameraTheta += deltaX * 0.01;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+      }
       
-      updateCameraPosition();
+      // Handle button hover effects
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      mouseX = event.clientX;
-      mouseY = event.clientY;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(interactiveButtons);
+
+      // Reset all buttons to normal state
+      interactiveButtons.forEach(button => {
+        const material = button.material as THREE.MeshPhongMaterial;
+        const buttonData = button.userData;
+        if (buttonData.drink) {
+          const drinkColors: Record<string, number> = {
+            'Cola': 0x8B4513, // Saddle brown for cola
+            'Orange Juice': 0xFF8C00, // Dark orange
+            'Water': 0x4169E1, // Royal blue
+            'Sprite': 0x32CD32 // Lime green
+          };
+          material.color.setHex(drinkColors[buttonData.drink] || 0x4CAF50);
+          material.emissive.setHex(0x0a0a0a); // Slight glow for selected drinks
+        } else {
+          material.color.setHex(0x4CAF50); // Bright green for unselected
+          material.emissive.setHex(0x0a1f0a); // Green glow
+        }
+        material.opacity = 0.9;
+      });
+
+      // Highlight hovered button
+      if (intersects.length > 0) {
+        const hoveredButton = intersects[0].object as THREE.Mesh;
+        const material = hoveredButton.material as THREE.MeshPhongMaterial;
+        material.opacity = 1.0;
+        // Make it brighter and add stronger glow
+        const currentColor = material.color.getHex();
+        material.color.setHex(Math.min(0xffffff, currentColor + 0x333333));
+        material.emissive.setHex(0x1a3a1a); // Stronger green glow on hover
+        
+        // Change cursor to pointer
+        renderer.domElement.style.cursor = 'pointer';
+      } else {
+        // Reset cursor
+        renderer.domElement.style.cursor = 'grab';
+      }
     };
 
     const onMouseUp = () => {
       isMouseDown = false;
+    };
+
+    // Handle mouse clicks for button interaction
+    const onMouseClick = (event: MouseEvent) => {
+      // Calculate mouse position in normalized device coordinates
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+
+      // Calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects(interactiveButtons);
+
+      if (intersects.length > 0) {
+        const clickedButton = intersects[0].object as THREE.Mesh;
+        const buttonData = clickedButton.userData;
+        
+        if (buttonData.type === 'bottle-button') {
+          onBottleButtonClick(buttonData);
+        }
+      }
+    };
+
+    // Handle bottle button clicks
+    const onBottleButtonClick = (buttonData: any) => {
+      console.log(`Clicked bottle button:`, {
+        moduleIndex: buttonData.moduleIndex,
+        side: buttonData.side === 0 ? 'left' : 'right',
+        position: buttonData.position,
+        currentDrink: buttonData.drink
+      });
+      
+      // Here you can add logic to open a drink selection dialog
+      // For now, let's cycle through some example drinks
+      const drinks = ['Cola', 'Orange Juice', 'Water', 'Sprite', null];
+      const currentIndex = drinks.indexOf(buttonData.drink);
+      const nextIndex = (currentIndex + 1) % drinks.length;
+      buttonData.drink = drinks[nextIndex];
+      
+      // Update button color based on selected drink
+      updateButtonAppearance(buttonData);
+      
+      console.log(`Set drink to: ${buttonData.drink || 'None'}`);
+    };
+
+    // Update button appearance based on selected drink
+    const updateButtonAppearance = (buttonData: any) => {
+      // Find the button mesh
+      const button = interactiveButtons.find(btn => 
+        btn.userData.moduleIndex === buttonData.moduleIndex &&
+        btn.userData.side === buttonData.side &&
+        btn.userData.position === buttonData.position
+      );
+      
+      if (button) {
+        const material = button.material as THREE.MeshPhongMaterial;
+        if (buttonData.drink) {
+          // Color based on drink type - brighter, more vibrant colors
+          const drinkColors: Record<string, number> = {
+            'Cola': 0x8B4513, // Saddle brown for cola
+            'Orange Juice': 0xFF8C00, // Dark orange
+            'Water': 0x4169E1, // Royal blue
+            'Sprite': 0x32CD32 // Lime green
+          };
+          material.color.setHex(drinkColors[buttonData.drink] || 0x4CAF50);
+          material.emissive.setHex(0x0a0a0a); // Slight glow for selected drinks
+        } else {
+          // Bright green when no drink selected to indicate it's clickable
+          material.color.setHex(0x4CAF50);
+          material.emissive.setHex(0x0a1f0a); // Green glow to show it's interactive
+        }
+      }
     };
 
     // Touch event handlers
