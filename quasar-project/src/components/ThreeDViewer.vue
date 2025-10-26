@@ -22,7 +22,7 @@ export default defineComponent({
     let mouseY = 0;
     let cameraRadius = 12;
     let cameraTheta = Math.PI / 4; // Horizontal angle
-    let cameraPhi = Math.PI / 3; // Vertical angle
+    const cameraPhi = Math.PI / 3; // Fixed vertical angle - no longer variable
     const cameraTarget = new THREE.Vector3(0, 1.5, 0);
 
     const init = () => {
@@ -199,14 +199,9 @@ export default defineComponent({
       if (!isMouseDown) return;
 
       const deltaX = event.clientX - mouseX;
-      const deltaY = event.clientY - mouseY;
 
-      // Update camera orbital angles
+      // Update camera orbital angle (only horizontal rotation)
       cameraTheta += deltaX * 0.01;
-      cameraPhi -= deltaY * 0.01;
-      
-      // Clamp vertical angle to prevent going below floor level
-      cameraPhi = Math.max(0.3, Math.min(Math.PI - 0.1, cameraPhi));
       
       updateCameraPosition();
 
@@ -232,14 +227,9 @@ export default defineComponent({
 
       event.preventDefault();
       const deltaX = event.touches[0].clientX - mouseX;
-      const deltaY = event.touches[0].clientY - mouseY;
 
-      // Update camera orbital angles
+      // Update camera orbital angle (only horizontal rotation)
       cameraTheta += deltaX * 0.01;
-      cameraPhi -= deltaY * 0.01;
-      
-      // Clamp vertical angle to prevent going below floor level
-      cameraPhi = Math.max(0.3, Math.min(Math.PI - 0.1, cameraPhi));
       
       updateCameraPosition();
 
