@@ -95,10 +95,10 @@ export default defineComponent({
       machineGroup = new THREE.Group();
       
       // Number of modules on each side
-      const modulesPerSide = 3;
+      const modulesPerSide = 8;
       
       // Materials
-      const mainMaterial = new THREE.MeshPhongMaterial({ color: 0x2c3e50 }); // Dark blue-gray for main component
+      const mainMaterial = new THREE.MeshPhongMaterial({ color: 0x2c3e50 }); // dark gray for main component
       const moduleMaterial = new THREE.MeshPhongMaterial({ color: 0x34495e }); // Slightly lighter for modules
       const towerMaterial = new THREE.MeshPhongMaterial({ 
         color: 0x7f8c8d, // Gray for towers
@@ -121,41 +121,39 @@ export default defineComponent({
           const moduleGroup = new THREE.Group();
           
           // Position modules next to the main component
-          const moduleX = sideMultiplier * (1.5 + (i + 1) * 1.2); // 1.5 = half width of main + spacing
+          // First module (i=0) starts at distance 1.5 from center, others are spaced 0.6 apart
+          const moduleX = sideMultiplier * (1.5 + i * 0.6);
           
-          // Create two towers per module
-          for (let tower = 0; tower < 2; tower++) {
-            const towerGeometry = new THREE.CylinderGeometry(0.15, 0.15, 2.5, 16);
-            const towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
-            
-            // Position towers within the module
-            const towerZ = (tower === 0 ? -0.3 : 0.3);
-            towerMesh.position.set(moduleX, 1.25, towerZ);
-            towerMesh.castShadow = true;
-            
-            moduleGroup.add(towerMesh);
-            
-            // Add light strip inside each tower
-            const lightStripGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2.3, 8);
-            const lightStripMaterial = new THREE.MeshPhongMaterial({ 
-              color: 0x00ffff, // Cyan color for the light strip
-              emissive: 0x00aaaa, // Much brighter glow
-              transparent: true,
-              opacity: 1.0 // Full opacity for brighter appearance
-            });
-            const lightStrip = new THREE.Mesh(lightStripGeometry, lightStripMaterial);
-            lightStrip.position.set(moduleX, 1.25, towerZ);
-            
-            moduleGroup.add(lightStrip);
-            
-            // Add point light inside the tower for actual illumination
-            const pointLight = new THREE.PointLight(0x00ffff, 1.2, 4); // Much brighter and wider range
-            pointLight.position.set(moduleX, 1.25, towerZ);
-            moduleGroup.add(pointLight);
-          }
+          // Create one tower per module
+          const towerGeometry = new THREE.CylinderGeometry(0.15, 0.15, 2.5, 16);
+          const towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
+          
+          // Position tower in the center of the module
+          towerMesh.position.set(moduleX, 1.25, 0);
+          towerMesh.castShadow = true;
+          
+          moduleGroup.add(towerMesh);
+          
+          // Add light strip inside the tower
+          const lightStripGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2.3, 8);
+          const lightStripMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x00ffff, // Cyan color for the light strip
+            emissive: 0x00aaaa, // Much brighter glow
+            transparent: true,
+            opacity: 1.0 // Full opacity for brighter appearance
+          });
+          const lightStrip = new THREE.Mesh(lightStripGeometry, lightStripMaterial);
+          lightStrip.position.set(moduleX, 1.25, 0);
+          
+          moduleGroup.add(lightStrip);
+          
+          // Add point light inside the tower for actual illumination
+          const pointLight = new THREE.PointLight(0x00ffff, 1.2, 4); // Much brighter and wider range
+          pointLight.position.set(moduleX, 1.25, 0);
+          moduleGroup.add(pointLight);
           
           // Add a small base platform for each module
-          const baseGeometry = new THREE.BoxGeometry(0.8, 0.2, 0.8);
+          const baseGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.8);
           const baseMesh = new THREE.Mesh(baseGeometry, moduleMaterial);
           baseMesh.position.set(moduleX, 0.1, 0);
           baseMesh.castShadow = true;
@@ -246,10 +244,10 @@ export default defineComponent({
       event.preventDefault();
       const zoomSpeed = .4;
       
-      if (event.deltaY > 0 && cameraRadius < 15) {
+      if (event.deltaY > 0 && cameraRadius < 30) {
         // Zoom out
         cameraRadius += zoomSpeed;
-      } else if (event.deltaY < 0 && cameraRadius > 10) {
+      } else if (event.deltaY < 0 && cameraRadius > 25) {
         // Zoom in
         cameraRadius -= zoomSpeed;
       }
