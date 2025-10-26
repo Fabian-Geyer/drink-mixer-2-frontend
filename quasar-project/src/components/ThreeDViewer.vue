@@ -5,6 +5,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export default defineComponent({
   name: 'ThreeDViewer',
@@ -20,7 +21,7 @@ export default defineComponent({
     let isMouseDown = false;
     let mouseX = 0;
     let mouseY = 0;
-    let cameraRadius = 12;
+    let cameraRadius = 20;
     let cameraTheta = Math.PI / 4; // Horizontal angle
     const cameraPhi = Math.PI / 3; // Fixed vertical angle - no longer variable
     const cameraTarget = new THREE.Vector3(0, 1.5, 0);
@@ -97,8 +98,7 @@ export default defineComponent({
       // Number of modules on each side
       const modulesPerSide = 8;
       
-      // Materials
-      const mainMaterial = new THREE.MeshPhongMaterial({ color: 0x2c3e50 }); // dark gray for main component
+      // Materials for the side modules
       const moduleMaterial = new THREE.MeshPhongMaterial({ color: 0x34495e }); // Slightly lighter for modules
       const towerMaterial = new THREE.MeshPhongMaterial({ 
         color: 0x7f8c8d, // Gray for towers
@@ -106,12 +106,41 @@ export default defineComponent({
         opacity: 0.6 // Make towers more transparent to let light through
       });
       
-      // Main component (cube in the middle)
-      const mainGeometry = new THREE.BoxGeometry(2, 3, 1.5);
-      const mainComponent = new THREE.Mesh(mainGeometry, mainMaterial);
-      mainComponent.position.y = 1.5; // Half height above ground
-      mainComponent.castShadow = true;
-      machineGroup.add(mainComponent);
+      // Load the main machine component from GLTF
+      const loader = new GLTFLoader();
+      loader.load(
+        '/models/main_module.glb', // Your exported main module file
+        (gltf) => {
+          const mainComponent = gltf.scene;
+          
+          // Scale and position the loaded model as needed
+          mainComponent.scale.setScalar(.1); // Adjust scale if needed
+          mainComponent.position.set(0, 0, 0); // Adjust position if needed
+          
+          // Enable shadows for all meshes in the model
+          mainComponent.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+          
+          machineGroup.add(mainComponent);
+        },
+        (progress) => {
+          console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+        },
+        (error) => {
+          console.error('Error loading GLTF model:', error);
+          // Fallback: create a simple cube if model fails to load
+          const fallbackGeometry = new THREE.BoxGeometry(2, 3, 1.5);
+          const fallbackMaterial = new THREE.MeshPhongMaterial({ color: 0x2c3e50 });
+          const fallbackComponent = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+          fallbackComponent.position.y = 1.5;
+          fallbackComponent.castShadow = true;
+          machineGroup.add(fallbackComponent);
+        }
+      );
       
       // Create modules on both sides
       for (let side = 0; side < 2; side++) {
@@ -244,10 +273,10 @@ export default defineComponent({
       event.preventDefault();
       const zoomSpeed = .4;
       
-      if (event.deltaY > 0 && cameraRadius < 30) {
+      if (event.deltaY > 0 && cameraRadius < 20) {
         // Zoom out
         cameraRadius += zoomSpeed;
-      } else if (event.deltaY < 0 && cameraRadius > 25) {
+      } else if (event.deltaY < 0 && cameraRadius > 15) {
         // Zoom in
         cameraRadius -= zoomSpeed;
       }
