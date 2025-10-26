@@ -83,18 +83,20 @@ export default defineComponent({
       fillLight.castShadow = false; // No shadows for fill light
       scene.add(fillLight);
 
-      // Add ground plane to receive shadows
-      const planeGeometry = new THREE.PlaneGeometry(20, 15);
-      const planeMaterial = new THREE.MeshPhongMaterial({ 
-        color: 0x2c2c2c,
-        transparent: true,
-        opacity: 0.8
+      // Add circular ground plane to receive shadows - larger, dark and reflective
+      const circleGeometry = new THREE.CircleGeometry(9, 64); // Larger radius for more presence
+      const circleMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x1a1a1a, // Very dark gray, almost black
+        shininess: 100, // High shininess for reflective effect
+        specular: 0x444444, // Specular highlights for reflection
+        transparent: false,
+        opacity: 1.0
       });
-      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-      plane.rotation.x = -Math.PI / 2;
-      plane.position.y = 0;
-      plane.receiveShadow = true;
-      scene.add(plane);
+      const circleFloor = new THREE.Mesh(circleGeometry, circleMaterial);
+      circleFloor.rotation.x = -Math.PI / 2;
+      circleFloor.position.y = 0;
+      circleFloor.receiveShadow = true;
+      scene.add(circleFloor);
 
       // Event listeners for mouse interaction
       renderer.domElement.addEventListener('mousedown', onMouseDown);
