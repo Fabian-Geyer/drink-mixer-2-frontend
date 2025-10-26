@@ -59,14 +59,29 @@ export default defineComponent({
       // Create the cocktail machine
       createCocktailMachine();
 
-      // Add lighting
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      // Add lighting - increased for better global illumination
+      const ambientLight = new THREE.AmbientLight(0x606060, 1.2); // Brighter ambient light
       scene.add(ambientLight);
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(5, 5, 5);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Stronger directional light
+      directionalLight.position.set(5, 8, 5);
       directionalLight.castShadow = true;
+      // Configure shadow properties for better quality
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048;
+      directionalLight.shadow.camera.near = 0.5;
+      directionalLight.shadow.camera.far = 50;
+      directionalLight.shadow.camera.left = -20;
+      directionalLight.shadow.camera.right = 20;
+      directionalLight.shadow.camera.top = 20;
+      directionalLight.shadow.camera.bottom = -20;
       scene.add(directionalLight);
+
+      // Add additional fill light from the opposite side
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+      fillLight.position.set(-5, 3, -5);
+      fillLight.castShadow = false; // No shadows for fill light
+      scene.add(fillLight);
 
       // Add ground plane to receive shadows
       const planeGeometry = new THREE.PlaneGeometry(20, 15);
@@ -171,23 +186,40 @@ export default defineComponent({
           
           moduleGroup.add(towerMesh);
           
-          // Add light strip inside the tower
-          const lightStripGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2.3, 8);
-          const lightStripMaterial = new THREE.MeshPhongMaterial({ 
-            color: 0x00ffff, // Cyan color for the light strip
-            emissive: 0x00aaaa, // Much brighter glow
+          // Create two directional light strips - front (green) and back (red)
+          
+          // Front-facing light strip (green)
+          const frontLightStripGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2.3, 8);
+          const frontLightStripMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x00ff00, // Green color for front-facing strip
+            emissive: 0x003300, // Green glow
             transparent: true,
-            opacity: 1.0 // Full opacity for brighter appearance
+            opacity: 1.0
           });
-          const lightStrip = new THREE.Mesh(lightStripGeometry, lightStripMaterial);
-          lightStrip.position.set(moduleX, 1.25, 0);
+          const frontLightStrip = new THREE.Mesh(frontLightStripGeometry, frontLightStripMaterial);
+          frontLightStrip.position.set(moduleX - 0.08, 1.25, 0); // Offset towards front
+          moduleGroup.add(frontLightStrip);
           
-          moduleGroup.add(lightStrip);
+          // Back-facing light strip (red)
+          const backLightStripGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2.3, 8);
+          const backLightStripMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0xff0000, // Red color for back-facing strip
+            emissive: 0x330000, // Red glow
+            transparent: true,
+            opacity: 1.0
+          });
+          const backLightStrip = new THREE.Mesh(backLightStripGeometry, backLightStripMaterial);
+          backLightStrip.position.set(moduleX + 0.08, 1.25, 0); // Offset towards back
+          moduleGroup.add(backLightStrip);
           
-          // Add point light inside the tower for actual illumination
-          const pointLight = new THREE.PointLight(0x00ffff, 1.2, 4); // Much brighter and wider range
-          pointLight.position.set(moduleX, 1.25, 0);
-          moduleGroup.add(pointLight);
+          // Add simple point lights for illumination (simpler approach)
+          const frontPointLight = new THREE.PointLight(0x00ff00, 0.5, 3);
+          frontPointLight.position.set(moduleX - 0.08, 1.5, 0.5);
+          moduleGroup.add(frontPointLight);
+          
+          const backPointLight = new THREE.PointLight(0xff0000, 0.5, 3);
+          backPointLight.position.set(moduleX + 0.08, 1.5, -0.5);
+          moduleGroup.add(backPointLight);
           
           // Create interactive buttons for bottle positions
           const buttonMaterial = new THREE.MeshPhongMaterial({ 
