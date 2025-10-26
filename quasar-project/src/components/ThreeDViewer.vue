@@ -24,7 +24,7 @@ export default defineComponent({
     let cameraRadius = 20;
     let cameraTheta = Math.PI / 4; // Horizontal angle
     const cameraPhi = Math.PI / 3; // Fixed vertical angle - no longer variable
-    const cameraTarget = new THREE.Vector3(0, 1.5, 0);
+    const cameraTarget = new THREE.Vector3(0, 0, 0);
 
     const init = () => {
       if (!container.value) return;
