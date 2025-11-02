@@ -5,13 +5,7 @@
       <q-card-section class="card-header">
         <div class="row items-center justify-between">
           <div class="text-h6 text-white">Cocktailrezepte</div>
-          <q-btn 
-            fab
-            color="secondary"
-            text-color="white"
-            @click="showAddDialog = true" 
-            icon="add"
-          />
+          <CocktailAdd />
         </div>
       </q-card-section>
       
@@ -40,54 +34,23 @@
         </q-list>
       </q-card-section>
     </q-card>
-    
-    <!-- Add Cocktail Dialog -->
-    <q-dialog v-model="showAddDialog">
-      <q-card class="dark-dialog" dark>
-        <q-card-section>
-          <div class="text-h6 q-mb-md">Neuer Cocktail</div>
-          <q-input
-            placeholder="Cocktail Name"
-            v-model="cocktailName"
-            autofocus
-            dark
-            size="lg"
-            class="q-mb-lg"
-          />
-          
-          <q-card color="secondary" class="q-mt-md">
-            <q-card-section>
-              <q-select
-                filled
-                v-model="selectedIngredient"
-                :options="[]"
-                label="Zutat auswählen"
-              />
-            </q-card-section>
-          </q-card>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
 import { useCocktailStore } from 'stores/cocktails';
+import CocktailAdd from './CocktailAdd.vue';
 
 export default {
   name: 'CocktailTable',
+  components: {
+    CocktailAdd,
+  },
   setup() {
     const cocktailStore = useCocktailStore();
-    const showAddDialog = ref(false);
-    const cocktailName = ref('');
-    const selectedIngredient = ref(null);
 
     return {
       cocktailStore,
-      showAddDialog,
-      cocktailName,
-      selectedIngredient,
     };
   },
   mounted() {
