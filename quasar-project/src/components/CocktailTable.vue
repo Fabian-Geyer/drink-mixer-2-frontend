@@ -3,7 +3,16 @@
     <q-card class="cocktail-card">
       <!-- Card Header -->
       <q-card-section class="card-header">
-        <div class="text-h6 text-white">Cocktailrezepte</div>
+        <div class="row items-center justify-between">
+          <div class="text-h6 text-white">Cocktailrezepte</div>
+          <q-btn 
+            fab
+            color="secondary"
+            text-color="white"
+            @click="showAddDialog = true" 
+            icon="add"
+          />
+        </div>
       </q-card-section>
       
       <!-- Cocktail List Content -->
@@ -30,33 +39,29 @@
           </q-item>
         </q-list>
       </q-card-section>
-      
-      <!-- Add Button Section -->
-      <q-card-section class="q-pt-md">
-        <div class="row justify-end">
-          <q-btn round
-            color="primary" 
-            @click="showAddDialog = true" 
-            icon="add" 
-            label=""
-            unelevated
-          />
-        </div>
-      </q-card-section>
     </q-card>
+    
+    <!-- Add Cocktail Dialog -->
+    <q-dialog v-model="showAddDialog">
+      <q-card class="dark-dialog">
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
 import { useCocktailStore } from 'stores/cocktails';
+
 export default {
   name: 'CocktailTable',
   setup() {
     const cocktailStore = useCocktailStore();
+    const showAddDialog = ref(false);
+
     return {
       cocktailStore,
-      showAddDialog: ref(false),
+      showAddDialog,
     };
   },
   mounted() {
@@ -110,4 +115,10 @@ export default {
     color: var(--modern-text-secondary)
     font-size: 0.9em
     font-weight: 500
+
+.dark-dialog
+  background: var(--modern-surface)
+  border: 1px solid var(--modern-border)
+  min-width: 400px
+  min-height: 300px
 </style>
