@@ -3,7 +3,16 @@
     <q-card class="ingredient-card">
       <!-- Card Header -->
       <q-card-section class="card-header">
-        <div class="text-h6 text-white">Zutaten</div>
+        <div class="row items-center justify-between">
+          <div class="text-h6 text-white">Zutaten</div>
+          <q-btn 
+            fab
+            color="secondary"
+            text-color="white"
+            @click="showAddDialog = true" 
+            icon="add"
+          />
+        </div>
       </q-card-section>
       
       <!-- Table Content -->
@@ -40,18 +49,7 @@
         </q-markup-table>
       </q-card-section>
       
-      <!-- Add Button Section -->
-      <q-card-section class="q-pt-md">
-        <div class="row justify-end">
-          <q-btn 
-            color="primary" 
-            @click="showAddDialog = true" 
-            icon="add" 
-            label=""
-            unelevated
-          />
-        </div>
-      </q-card-section>
+      
     </q-card>
     <!-- Add Ingredient Dialog -->
     <q-dialog v-model="showAddDialog" persistent>
