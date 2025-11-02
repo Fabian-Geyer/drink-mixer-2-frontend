@@ -52,8 +52,8 @@
       
     </q-card>
     <!-- Add Ingredient Dialog -->
-    <q-dialog v-model="showAddDialog" persistent>
-      <q-card style="min-width: 350px">
+    <q-dialog v-model="showAddDialog">
+      <q-card class="dark-dialog" dark>
         <q-card-section>
           <div class="text-h6">Name der Zutat:</div>
         </q-card-section>
@@ -68,6 +68,7 @@
             @keyup.enter="add_ingredient"
             maxlength="30"
             counter
+            dark
           />
         </q-card-section>
         <q-card-section>
@@ -101,7 +102,7 @@
 
     <!-- Edit Ingredient Dialog -->
     <q-dialog v-model="showEditDialog" persistent>
-      <q-card style="min-width: 350px">
+      <q-card class="dark-dialog" dark>
         <q-card-section>
           <div class="text-h6">Zutat bearbeiten:</div>
         </q-card-section>
@@ -114,6 +115,7 @@
             v-model="editIngredientName"
             autofocus
             @keyup.enter="edit_ingredient"
+            dark
           />
         </q-card-section>
         <q-card-section>
@@ -291,4 +293,9 @@ export default {
   
   &:hover
     background: rgba(30, 144, 255, 0.1) !important
+
+.dark-dialog
+  background: var(--modern-surface)
+  border: 1px solid var(--modern-border)
+  min-width: 350px
 </style>
