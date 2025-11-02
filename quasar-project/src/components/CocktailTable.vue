@@ -43,7 +43,29 @@
     
     <!-- Add Cocktail Dialog -->
     <q-dialog v-model="showAddDialog">
-      <q-card class="dark-dialog">
+      <q-card class="dark-dialog" dark>
+        <q-card-section>
+          <div class="text-h6 q-mb-md">Neuer Cocktail</div>
+          <q-input
+            placeholder="Cocktail Name"
+            v-model="cocktailName"
+            autofocus
+            dark
+            size="lg"
+            class="q-mb-lg"
+          />
+          
+          <q-card color="secondary" class="q-mt-md">
+            <q-card-section>
+              <q-select
+                filled
+                v-model="selectedIngredient"
+                :options="[]"
+                label="Zutat auswählen"
+              />
+            </q-card-section>
+          </q-card>
+        </q-card-section>
       </q-card>
     </q-dialog>
   </div>
@@ -58,10 +80,14 @@ export default {
   setup() {
     const cocktailStore = useCocktailStore();
     const showAddDialog = ref(false);
+    const cocktailName = ref('');
+    const selectedIngredient = ref(null);
 
     return {
       cocktailStore,
       showAddDialog,
+      cocktailName,
+      selectedIngredient,
     };
   },
   mounted() {
