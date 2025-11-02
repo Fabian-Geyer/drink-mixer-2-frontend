@@ -34,7 +34,7 @@
       <!-- Add Button Section -->
       <q-card-section class="q-pt-md">
         <div class="row justify-end">
-          <q-btn 
+          <q-btn round
             color="primary" 
             @click="showAddDialog = true" 
             icon="add" 
