@@ -68,6 +68,8 @@
             v-model="ingredient_name"
             autofocus
             @keyup.enter="add_ingredient"
+            maxlength="30"
+            counter
           />
         </q-card-section>
         <q-card-section>
