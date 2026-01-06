@@ -54,10 +54,22 @@
   }
   
   .q-btn {
-    border-radius: 12px;
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0.5px;
+  }
+
+  // round buttons with a always centered plus sign and fixed text size:
+  .q-btn--add {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    font-size: 10px;
+
+    .q-icon {
+      margin: 0;
+    }
   }
   
   .q-dialog .q-card {

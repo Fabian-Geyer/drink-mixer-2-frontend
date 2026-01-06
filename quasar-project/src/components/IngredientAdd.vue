@@ -1,8 +1,7 @@
 <template>
   <div>
-    <q-btn color="primary" @click="showDialog = true">
+    <q-btn class="q-btn--add" color="primary" @click="showDialog = true">
       <q-icon left size="3em" name="add" />
-      <div>Neue Zutat</div>
     </q-btn>
 
     <q-dialog v-model="showDialog" persistent>
