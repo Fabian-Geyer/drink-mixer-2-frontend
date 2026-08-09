@@ -26,6 +26,17 @@ const emits = defineEmits<DialogContentEmits>()
 const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+// The on-screen keyboard (OnScreenKeyboard.vue) is a global sibling, not
+// inside this dialog's own portaled content - without this, Reka UI treats
+// every tap on it as an "outside" interaction and dismisses the dialog,
+// which is exactly what's open when the keyboard is actually in use.
+function ignoreOnScreenKeyboardOutsideInteraction(event: Event) {
+  const target = event.target as HTMLElement | null
+  if (target?.closest('[data-onscreen-keyboard]')) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -34,9 +45,17 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     <DialogContent
       data-slot="dialog-content"
       v-bind="{ ...$attrs, ...forwarded }"
+      @interact-outside="ignoreOnScreenKeyboardOutsideInteraction"
       :class="
         cn(
-          'bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 grid max-w-[calc(100%-2rem)] gap-4 rounded-xl p-4 text-sm ring-1 duration-100 sm:max-w-sm fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 outline-none',
+          // Anchored near the top (not vertically centered) and capped to
+          // the viewport height (minus whatever the on-screen keyboard is
+          // currently using, via --keyboard-space - see OnScreenKeyboard.vue)
+          // with internal scroll: on the 480px-tall kiosk screen, a centered
+          // dialog collides with the keyboard docked at the bottom whenever
+          // a field inside it is focused - staying up top and shrinking
+          // keeps the focused field visible instead of hidden underneath it.
+          'bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 grid max-w-[calc(100%-2rem)] max-h-[calc(100%-2rem-var(--keyboard-space,0px))] gap-4 overflow-y-auto rounded-xl p-4 text-sm ring-1 duration-100 sm:max-w-sm fixed top-4 left-1/2 z-50 w-full -translate-x-1/2 outline-none',
           props.class,
         )
       "
