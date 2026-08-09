@@ -32,6 +32,9 @@ importers:
       shadcn-vue:
         specifier: ^2.8.2
         version: 2.8.2(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(vue@3.5.41(typescript@5.7.3))
+      simple-keyboard:
+        specifier: ^3.8.175
+        version: 3.8.175
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -2839,6 +2842,9 @@ packages:
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+
+  simple-keyboard@3.8.175:
+    resolution: {integrity: sha512-+yfWdTSNCcvsZDFYFy8J5SmHbzW+/GyJB2BWCfxGrYR3N2FrTSCcbf7TviU+I6uE/mGAJw/vHBF28EQExbADdg==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -6019,6 +6025,8 @@ snapshots:
   siginfo@2.0.0: {}
 
   signal-exit@4.1.0: {}
+
+  simple-keyboard@3.8.175: {}
 
   sisteransi@1.0.5: {}
 

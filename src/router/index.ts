@@ -1,4 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUiStore } from '@/stores/ui'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresPin?: boolean
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +42,17 @@ const router = createRouter({
       component: () => import('../pages/NotFoundPage.vue'),
     },
   ],
+})
+
+router.beforeEach((to) => {
+  if (to.meta.requiresPin) {
+    const ui = useUiStore()
+    if (!ui.pinUnlocked) {
+      ui.requestPinGate(to.fullPath)
+      return false
+    }
+  }
+  return true
 })
 
 export default router
