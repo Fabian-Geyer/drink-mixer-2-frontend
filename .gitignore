@@ -1,3 +1,30 @@
-quasar-project/quasar.config.js.temporary.compiled.1760885815651.mjs
-quasar-project/quasar.config.js.temporary.compiled.1760885917252.mjs
+node_modules
 .DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Env
+.env
+.env.*.local
+!.env.example
