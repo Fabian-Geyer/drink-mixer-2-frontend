@@ -16,6 +16,16 @@ export default defineConfigWithVueTs(
   vueTsConfigs.recommended,
 
   {
+    // shadcn-vue's generated primitives (Button.vue, Input.vue, ...) are
+    // single-word by convention - not our code to rename.
+    name: 'app/shadcn-vue-ui',
+    files: ['src/components/ui/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
+  {
     ...pluginPlaywright.configs['flat/recommended'],
     files: ['e2e/**/*.{test,spec}.{js,ts,jsx,tsx}'],
   },
