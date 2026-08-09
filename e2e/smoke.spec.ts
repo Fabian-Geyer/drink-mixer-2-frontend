@@ -8,8 +8,10 @@ test('redirects to the order page and renders the shell', async ({ page }) => {
 })
 
 test('tapping a nav link navigates to that screen', async ({ page }) => {
+  // Status, not Barkeeper: Barkeeper is PIN-gated (see pin-gate.spec.ts) -
+  // this test is only about the nav bar itself.
   await page.goto('/order')
-  await page.getByRole('link', { name: 'Barkeeper' }).tap()
-  await expect(page).toHaveURL(/\/barkeeper$/)
-  await expect(page.getByRole('heading', { name: 'Barkeeper' })).toBeVisible()
+  await page.getByRole('link', { name: 'Status' }).tap()
+  await expect(page).toHaveURL(/\/status$/)
+  await expect(page.getByRole('heading', { name: 'Status' })).toBeVisible()
 })

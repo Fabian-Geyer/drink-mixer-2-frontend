@@ -29,5 +29,11 @@ export default defineConfig({
     command: 'pnpm dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
+    // Explicit, not read from a (gitignored, possibly-absent) .env file -
+    // e2e specs need a known PIN to test the gate deterministically.
+    env: {
+      VITE_ADMIN_PIN: '1234',
+      VITE_BACKEND_URL: 'http://127.0.0.1:5055',
+    },
   },
 })

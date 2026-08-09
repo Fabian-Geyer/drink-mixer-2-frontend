@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia } from 'pinia'
 import router from '@/router'
 import App from './App.vue'
 
@@ -8,7 +9,7 @@ describe('App', () => {
     router.push('/')
     await router.isReady()
 
-    const wrapper = mount(App, { global: { plugins: [router] } })
+    const wrapper = mount(App, { global: { plugins: [router, createPinia()] } })
 
     expect(wrapper.get('h1').text()).toBe('Order')
     expect(wrapper.get('nav').text()).toContain('Barkeeper')
