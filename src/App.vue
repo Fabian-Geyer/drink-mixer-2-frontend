@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import KioskShell from '@/components/layout/KioskShell.vue'
 </script>
 
 <template>
-  <RouterView />
+  <KioskShell />
 </template>
