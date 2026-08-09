@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router'
 import NavBar from './NavBar.vue'
 import OnScreenKeyboard from '@/components/keyboard/OnScreenKeyboard.vue'
 import PinGateDialog from '@/components/pin/PinGateDialog.vue'
+import { Toaster } from '@/components/ui/sonner'
 </script>
 
 <template>
@@ -13,5 +14,6 @@ import PinGateDialog from '@/components/pin/PinGateDialog.vue'
     <OnScreenKeyboard />
     <NavBar />
     <PinGateDialog />
+    <Toaster theme="dark" position="top-center" />
   </div>
 </template>

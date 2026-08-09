@@ -24,6 +24,10 @@ export const buttonVariants = cva(
       // icon-sm variants stay small on purpose, for dense contexts (e.g. a
       // table row) where every cell can't be full touch-target size - avoid
       // them for a screen's primary action.
+      //
+      // NOTE: `shadcn-vue add` re-templates this whole file from the
+      // registry whenever an added component depends on Button - if a
+      // future `add` wipes this comment/these sizes, reapply them.
       size: {
         default:
           'h-14 gap-1.5 px-4 text-base has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
