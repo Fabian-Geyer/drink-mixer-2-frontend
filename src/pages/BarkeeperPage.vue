@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import IngredientList from '@/components/barkeeper/IngredientList.vue'
+import CocktailList from '@/components/barkeeper/CocktailList.vue'
 </script>
 
 <template>
@@ -14,7 +15,9 @@ import IngredientList from '@/components/barkeeper/IngredientList.vue'
       <TabsContent value="ingredients" class="overflow-y-auto">
         <IngredientList />
       </TabsContent>
-      <TabsContent value="cocktails" class="overflow-y-auto"> Coming soon. </TabsContent>
+      <TabsContent value="cocktails" class="overflow-y-auto">
+        <CocktailList />
+      </TabsContent>
     </Tabs>
   </div>
 </template>
