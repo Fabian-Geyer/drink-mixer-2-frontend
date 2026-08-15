@@ -103,3 +103,27 @@ watch(
     </div>
   </div>
 </template>
+
+<style>
+/* simple-keyboard's own stylesheet (imported above) is a light theme
+   (white keys, light gray background) - this app is dark-only, and
+   simple-keyboard doesn't ship a dark variant, so override it here.
+   Unscoped: simple-keyboard renders its DOM imperatively, outside Vue's
+   render tree, so a normal `scoped` style wouldn't ever match it. */
+.simple-keyboard.hg-theme-default {
+  background-color: transparent;
+  padding: 0;
+}
+
+.simple-keyboard.hg-theme-default .hg-button {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.simple-keyboard.hg-theme-default .hg-button.hg-activeButton {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+</style>
